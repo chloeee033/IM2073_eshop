@@ -40,64 +40,140 @@ public class EshopOrderServlet extends HttpServlet {
       out.println("<head><title>Order Response</title></head>");
       out.println("<body>");
 
-      try (
-         Connection conn = DriverManager.getConnection(
+      try (Connection conn = DriverManager.getConnection(
                "jdbc:mysql://localhost:3306/ebookshop?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC",
-               "myuser", "xxxx");
-         PreparedStatement updateBookStmt =
-               conn.prepareStatement("UPDATE books SET qty = qty - 1 WHERE id = ?");
-         PreparedStatement insertOrderStmt = conn.prepareStatement(
-               "INSERT INTO order_records (id, qty_ordered, cust_name, cust_email, cust_phone) "
-               + "VALUES (?, ?, ?, ?, ?)");
-      ) {
+               "myuser", "xxxx")) {
          String[] ids = request.getParameterValues("id");
          String custName = request.getParameter("cust_name");
          String custEmail = request.getParameter("cust_email");
          String custPhone = request.getParameter("cust_phone");
 
-         if (ids != null) {
-            int count;
-            boolean missingCustomerDetails = custName == null || custName.isBlank()
-                  || custEmail == null || custEmail.isBlank()
-                  || custPhone == null || custPhone.isBlank();
+         if (ids == null) {
+            out.println("<h3>Please go back and select a book...</h3>");
+            out.println("</body></html>");
+            out.close();
+            return;
+         }
 
-            if (missingCustomerDetails) {
-               out.println("<h3>Please go back and enter all customer details.</h3>");
-               out.println("</body></html>");
-               out.close();
-               return;
+         boolean missingCustomerDetails = custName == null || custName.isBlank()
+               || custEmail == null || custEmail.isBlank()
+               || custPhone == null || custPhone.isBlank();
+
+         if (missingCustomerDetails) {
+            out.println("<h3>Please go back and enter all customer details.</h3>");
+            out.println("</body></html>");
+            out.close();
+            return;
+         }
+
+         conn.setAutoCommit(false);
+
+         try (
+            PreparedStatement selectCustomerStmt =
+                  conn.prepareStatement("SELECT customer_id FROM customers WHERE cust_email = ?");
+            PreparedStatement updateCustomerStmt = conn.prepareStatement(
+                  "UPDATE customers SET cust_name = ?, cust_phone = ? WHERE customer_id = ?");
+            PreparedStatement insertCustomerStmt = conn.prepareStatement(
+                  "INSERT INTO customers (cust_name, cust_email, cust_phone) VALUES (?, ?, ?)",
+                  Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement insertOrderStmt = conn.prepareStatement(
+                  "INSERT INTO orders (customer_id, status) VALUES (?, ?)",
+                  Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement selectBookStmt = conn.prepareStatement(
+                  "SELECT title, price, qty FROM books WHERE id = ?");
+            PreparedStatement insertOrderItemStmt = conn.prepareStatement(
+                  "INSERT INTO order_items (order_id, book_id, qty_ordered, price_at_order) "
+                  + "VALUES (?, ?, ?, ?)");
+            PreparedStatement updateBookStmt =
+                  conn.prepareStatement("UPDATE books SET qty = qty - 1 WHERE id = ? AND qty > 0")
+         ) {
+            int customerId;
+            int orderId;
+
+            selectCustomerStmt.setString(1, custEmail);
+            try (ResultSet customerRset = selectCustomerStmt.executeQuery()) {
+               if (customerRset.next()) {
+                  customerId = customerRset.getInt("customer_id");
+                  updateCustomerStmt.setString(1, custName);
+                  updateCustomerStmt.setString(2, custPhone);
+                  updateCustomerStmt.setInt(3, customerId);
+                  updateCustomerStmt.executeUpdate();
+               } else {
+                  insertCustomerStmt.setString(1, custName);
+                  insertCustomerStmt.setString(2, custEmail);
+                  insertCustomerStmt.setString(3, custPhone);
+                  insertCustomerStmt.executeUpdate();
+                  try (ResultSet generatedKeys = insertCustomerStmt.getGeneratedKeys()) {
+                     if (!generatedKeys.next()) {
+                        throw new SQLException("Unable to create customer record.");
+                     }
+                     customerId = generatedKeys.getInt(1);
+                  }
+               }
+            }
+
+            insertOrderStmt.setInt(1, customerId);
+            insertOrderStmt.setString(2, "PLACED");
+            insertOrderStmt.executeUpdate();
+            try (ResultSet generatedKeys = insertOrderStmt.getGeneratedKeys()) {
+               if (!generatedKeys.next()) {
+                  throw new SQLException("Unable to create order record.");
+               }
+               orderId = generatedKeys.getInt(1);
             }
 
             out.println("<h3>Customer Details</h3>");
             out.println("<p>Name: " + escapeHtml(custName) + "</p>");
             out.println("<p>Email: " + escapeHtml(custEmail) + "</p>");
             out.println("<p>Phone: " + escapeHtml(custPhone) + "</p>");
+            out.println("<p>Customer ID: " + customerId + "</p>");
+            out.println("<p>Order ID: " + orderId + "</p>");
 
-            for (int i = 0; i < ids.length; ++i) {
-               String sqlStr = "UPDATE books SET qty = qty - 1 WHERE id = " + ids[i];
+            for (String idValue : ids) {
+               int bookId = Integer.parseInt(idValue);
+               String title;
+               double price;
+               int qty;
+
+               selectBookStmt.setInt(1, bookId);
+               try (ResultSet bookRset = selectBookStmt.executeQuery()) {
+                  if (!bookRset.next()) {
+                     throw new SQLException("Book id " + bookId + " does not exist.");
+                  }
+                  title = bookRset.getString("title");
+                  price = bookRset.getDouble("price");
+                  qty = bookRset.getInt("qty");
+               }
+
+               if (qty <= 0) {
+                  throw new SQLException("Book id " + bookId + " is out of stock.");
+               }
+
+               String sqlStr = "UPDATE books SET qty = qty - 1 WHERE id = " + bookId;
                out.println("<p>" + sqlStr + "</p>");
-               updateBookStmt.setInt(1, Integer.parseInt(ids[i]));
-               count = updateBookStmt.executeUpdate();
+               updateBookStmt.setInt(1, bookId);
+               int count = updateBookStmt.executeUpdate();
                out.println("<p>" + count + " record updated.</p>");
 
-               sqlStr = "INSERT INTO order_records (id, qty_ordered, cust_name, cust_email, cust_phone) "
-                     + "VALUES (" + ids[i] + ", 1, '" + custName + "', '" + custEmail + "', '"
-                     + custPhone + "')";
+               sqlStr = "INSERT INTO order_items (order_id, book_id, qty_ordered, price_at_order) "
+                     + "VALUES (" + orderId + ", " + bookId + ", 1, " + price + ")";
                out.println("<p>" + sqlStr + "</p>");
-               insertOrderStmt.setInt(1, Integer.parseInt(ids[i]));
-               insertOrderStmt.setInt(2, 1);
-               insertOrderStmt.setString(3, custName);
-               insertOrderStmt.setString(4, custEmail);
-               insertOrderStmt.setString(5, custPhone);
-               count = insertOrderStmt.executeUpdate();
-               out.println("<p>" + count + " record inserted.</p>");
+               insertOrderItemStmt.setInt(1, orderId);
+               insertOrderItemStmt.setInt(2, bookId);
+               insertOrderItemStmt.setInt(3, 1);
+               insertOrderItemStmt.setDouble(4, price);
+               count = insertOrderItemStmt.executeUpdate();
+               out.println("<p>" + count + " order item inserted.</p>");
 
-               out.println("<h3>Your order for book id=" + ids[i]
-                     + " has been confirmed.</h3>");
+               out.println("<h3>Your order for book id=" + bookId + " (" + escapeHtml(title)
+                     + ") has been confirmed.</h3>");
             }
+
+            conn.commit();
             out.println("<h3>Thank you.</h3>");
-         } else {
-            out.println("<h3>Please go back and select a book...</h3>");
+         } catch (SQLException ex) {
+            conn.rollback();
+            throw ex;
          }
       } catch (SQLException ex) {
          out.println("<p>Error: " + ex.getMessage() + "</p>");
