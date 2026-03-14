@@ -37,10 +37,16 @@ public class EshopQueryServlet extends HttpServlet {
          Statement stmt = conn.createStatement();
       ) {
          String[] authors = request.getParameterValues("author");
+         String sortOrder = request.getParameter("sort");
          if (authors == null) {
             out.println("<h3>No author selected. Please go back to select author(s).</h3>");
             out.println("</body></html>");
             return;
+         }
+         if (!"desc".equalsIgnoreCase(sortOrder)) {
+            sortOrder = "asc";
+         } else {
+            sortOrder = "desc";
          }
 
          String sqlStr = "SELECT * FROM books WHERE author IN (";
@@ -51,7 +57,8 @@ public class EshopQueryServlet extends HttpServlet {
                sqlStr += "'" + authors[i] + "'";
             }
          }
-         sqlStr += ") AND qty > 0 ORDER BY author ASC, title ASC";
+         sqlStr += ") AND qty > 0 ORDER BY price " + sortOrder.toUpperCase()
+               + ", author ASC, title ASC";
 
          out.println("<p>Your SQL statement is: " + escapeHtml(sqlStr) + "</p>");
          ResultSet rset = stmt.executeQuery(sqlStr);
