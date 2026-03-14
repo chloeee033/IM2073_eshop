@@ -36,3 +36,35 @@ create table order_items (
   constraint fk_order_items_book
     foreign key (book_id) references books(id)
 );
+
+insert into customers (customer_id, cust_name, cust_email, cust_phone) values
+  (1, 'Jesse Li', 'jesse@example.com', '81234567'),
+  (2, 'Alice Tan', 'alice@example.com', '82345678'),
+  (3, 'Brandon Lim', 'brandon@example.com', '83456789'),
+  (4, 'Cheryl Ng', 'cheryl@example.com', '84567890'),
+  (5, 'Daniel Koh', 'daniel@example.com', '85678901');
+
+insert into orders (order_id, customer_id, order_time, status) values
+  (1, 1, '2026-03-14 10:00:00', 'PLACED'),
+  (2, 2, '2026-03-14 10:15:00', 'PLACED'),
+  (3, 3, '2026-03-14 10:30:00', 'PLACED'),
+  (4, 4, '2026-03-14 10:45:00', 'PLACED'),
+  (5, 5, '2026-03-14 11:00:00', 'PLACED');
+
+insert into order_items (order_item_id, order_id, book_id, qty_ordered, price_at_order) values
+  (1, 1, 1004, 1, 44.44),
+  (2, 1, 1014, 1, 28.80),
+  (3, 2, 1010, 2, 31.20),
+  (4, 2, 1001, 1, 11.11),
+  (5, 3, 1017, 2, 37.25),
+  (6, 4, 1007, 1, 29.99),
+  (7, 4, 1014, 2, 28.80),
+  (8, 5, 1001, 3, 11.11),
+  (9, 5, 1010, 1, 31.20);
+
+update books set qty = qty - 4 where id = 1001;
+update books set qty = qty - 1 where id = 1004;
+update books set qty = qty - 1 where id = 1007;
+update books set qty = qty - 3 where id = 1010;
+update books set qty = qty - 3 where id = 1014;
+update books set qty = qty - 2 where id = 1017;
