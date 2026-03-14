@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="420" height="600" viewBox="0 0 420 600">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#36594d"/>
+      <stop offset="100%" stop-color="#14211c"/>
+    </linearGradient>
+  </defs>
+  <rect width="420" height="600" fill="url(#bg)"/>
+  <rect x="24" y="24" width="372" height="552" rx="18" fill="none" stroke="rgba(255,255,255,0.55)" stroke-width="3"/>
+  <circle cx="340" cy="88" r="42" fill="#a8f0bf" opacity="0.85"/>
+  <rect x="46" y="86" width="120" height="10" rx="5" fill="rgba(255,255,255,0.65)"/>
+  <rect x="46" y="108" width="88" height="10" rx="5" fill="rgba(255,255,255,0.45)"/>
+  <text x="46" y="218" fill="#fff9ef" font-size="34" font-family="Georgia, serif" font-weight="700">Database Design for Beginners</text>
+  <text x="46" y="266" fill="#fff1d6" font-size="20" font-family="Georgia, serif">by Mohammad Ali</text>
+  <rect x="46" y="330" width="328" height="2" fill="rgba(255,255,255,0.35)"/>
+  <text x="46" y="392" fill="#fff7e8" font-size="16" font-family="Courier New, monospace">YET ANOTHER E-BOOKSHOP</text>
+  <text x="46" y="430" fill="#fff7e8" font-size="16" font-family="Courier New, monospace">CURATED COURSE EDITION</text>
+  <rect x="46" y="474" width="130" height="34" rx="17" fill="rgba(255,255,255,0.18)"/>
+  <text x="68" y="497" fill="#fffdf6" font-size="16" font-family="Arial, sans-serif">Local Cover Art</text>
+</svg>

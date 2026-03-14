@@ -28,6 +28,10 @@ public class EshopQueryServlet extends HttpServlet {
       out.println("<html>");
       out.println("<head><title>Order Form</title></head>");
       out.println("<body>");
+      out.println("<div style='display: flex; justify-content: space-between; margin-bottom: 16px;'>");
+      out.println("<a href='eshophome'>Back to Home</a>");
+      out.println("<a href='adminlogin'>Admin Login</a>");
+      out.println("</div>");
       out.println("<h2>Yet Another e-Bookshop</h2>");
 
       try (
@@ -67,6 +71,7 @@ public class EshopQueryServlet extends HttpServlet {
          out.println("<table border='1' cellpadding='6' cellspacing='0'>");
          out.println("<tr>");
          out.println("<th>Select</th>");
+         out.println("<th>Cover</th>");
          out.println("<th>Book ID</th>");
          out.println("<th>Author</th>");
          out.println("<th>Title</th>");
@@ -77,6 +82,9 @@ public class EshopQueryServlet extends HttpServlet {
             out.println("<tr>");
             out.println("<td><input type='checkbox' name='id' value='"
                   + escapeHtml(rset.getString("id")) + "' /></td>");
+            out.println("<td><img src='" + escapeHtml(rset.getString("image_path"))
+                  + "' alt='" + escapeHtml(rset.getString("title"))
+                  + "' width='72' height='96' /></td>");
             out.println("<td>" + escapeHtml(rset.getString("id")) + "</td>");
             out.println("<td>" + escapeHtml(rset.getString("author")) + "</td>");
             out.println("<td>" + escapeHtml(rset.getString("title")) + "</td>");

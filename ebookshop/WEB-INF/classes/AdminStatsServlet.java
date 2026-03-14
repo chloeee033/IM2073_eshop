@@ -34,7 +34,7 @@ public class AdminStatsServlet extends HttpServlet {
       out.println("<head><title>Admin Statistics</title></head>");
       out.println("<body>");
       out.println("<div style='display: flex; justify-content: space-between; margin-bottom: 16px;'>");
-      out.println("<a href='eshopquery.html'>Back to Shop</a>");
+      out.println("<a href='eshophome'>Back to Shop</a>");
       out.println("<strong>Admin Statistics</strong>");
       out.println("<span>Logged in as admin</span>");
       out.println("</div>");

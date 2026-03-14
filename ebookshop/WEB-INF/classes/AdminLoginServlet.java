@@ -51,7 +51,7 @@ public class AdminLoginServlet extends HttpServlet {
       out.println("<head><title>Admin Login</title></head>");
       out.println("<body>");
       out.println("<div style='text-align: right; margin-bottom: 12px;'>");
-      out.println("<a href='eshopquery.html'>Back to Shop</a>");
+      out.println("<a href='eshophome'>Back to Shop</a>");
       out.println("</div>");
       out.println("<h2>Admin Login</h2>");
       if (error != null) {
