@@ -8,6 +8,16 @@ import jakarta.servlet.annotation.*;
 @WebServlet("/eshopquery")
 public class EshopQueryServlet extends HttpServlet {
 
+   private static String escapeHtml(String input) {
+      if (input == null) {
+         return "";
+      }
+      return input.replace("&", "&amp;")
+            .replace("<", "&lt;")
+            .replace(">", "&gt;")
+            .replace("\"", "&quot;");
+   }
+
    @Override
    public void doGet(HttpServletRequest request, HttpServletResponse response)
                throws ServletException, IOException {
@@ -43,19 +53,38 @@ public class EshopQueryServlet extends HttpServlet {
          }
          sqlStr += ") AND qty > 0 ORDER BY author ASC, title ASC";
 
-         out.println("<p>Your SQL statement is: " + sqlStr + "</p>");
+         out.println("<p>Your SQL statement is: " + escapeHtml(sqlStr) + "</p>");
          ResultSet rset = stmt.executeQuery(sqlStr);
 
-         out.println("<form method='get' action='eshoporder'>");
+         out.println("<form method='post' action='eshoporder'>");
+         out.println("<table border='1' cellpadding='6' cellspacing='0'>");
+         out.println("<tr>");
+         out.println("<th>Select</th>");
+         out.println("<th>Book ID</th>");
+         out.println("<th>Author</th>");
+         out.println("<th>Title</th>");
+         out.println("<th>Price</th>");
+         out.println("</tr>");
          int count = 0;
          while (rset.next()) {
-            out.println("<p><input type='checkbox' name='id' value='"
-                  + rset.getString("id") + "' />"
-                  + rset.getString("author") + ", "
-                  + rset.getString("title") + ", $"
-                  + rset.getString("price") + "</p>");
+            out.println("<tr>");
+            out.println("<td><input type='checkbox' name='id' value='"
+                  + escapeHtml(rset.getString("id")) + "' /></td>");
+            out.println("<td>" + escapeHtml(rset.getString("id")) + "</td>");
+            out.println("<td>" + escapeHtml(rset.getString("author")) + "</td>");
+            out.println("<td>" + escapeHtml(rset.getString("title")) + "</td>");
+            out.println("<td>$" + escapeHtml(rset.getString("price")) + "</td>");
+            out.println("</tr>");
             count++;
          }
+         out.println("</table>");
+         out.println("<br />");
+         out.println("<fieldset>");
+         out.println("<legend>Customer Details</legend>");
+         out.println("<p>Name: <input type='text' name='cust_name' required /></p>");
+         out.println("<p>Email: <input type='email' name='cust_email' required /></p>");
+         out.println("<p>Phone: <input type='text' name='cust_phone' required /></p>");
+         out.println("</fieldset>");
          out.println("<p><input type='submit' value='ORDER' /></p>");
          out.println("</form>");
          out.println("<p>==== " + count + " records found =====</p>");
