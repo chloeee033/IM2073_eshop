@@ -1,0 +1,21 @@
+.dashboard-shell {
+  min-height: 100vh;
+}
+
+.dashboard-toolbar {
+  margin-bottom: 1.4rem;
+}
+
+.stats-card {
+  height: 100%;
+  padding: 1.4rem;
+}
+
+.stats-customer-email {
+  color: var(--muted);
+  font-size: 0.92rem;
+}
+
+.stats-book-revenue {
+  color: var(--success);
+}

@@ -95,29 +95,5 @@ public class AdminLoginServlet extends HttpServlet {
       out.println("</body></html>");
       out.close();
    }
-   
-   /*private void renderLoginPage(HttpServletRequest request, HttpServletResponse response, String error)
-               throws IOException {
-      response.setContentType("text/html");
-      PrintWriter out = response.getWriter();
 
-      out.println("<!DOCTYPE html>");
-      out.println("<html>");
-      out.println("<head><title>Admin Login</title></head>");
-      out.println("<body>");
-      out.println("<div style='text-align: right; margin-bottom: 12px;'>");
-      out.println("<a href='eshophome'>Back to Shop</a>");
-      out.println("</div>");
-      out.println("<h2>Admin Login</h2>");
-      if (error != null) {
-         out.println("<p style='color: red;'>" + escapeHtml(error) + "</p>");
-      }
-      out.println("<form method='post' action='adminlogin'>");
-      out.println("<p>Username: <input type='text' name='username' required /></p>");
-      out.println("<p>Password: <input type='password' name='password' required /></p>");
-      out.println("<p><input type='submit' value='Login' /></p>");
-      out.println("</form>");
-      out.println("</body></html>");
-      out.close();
-   }*/
 }
