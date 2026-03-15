@@ -1,0 +1,75 @@
+<div class="selection-shell">
+  <div class="container py-5">
+    <header class="page-toolbar animate__animated animate__fadeInDown">
+      <a id="query-home-link" class="btn btn-outline-dark btn-sm" href="#">Back to Home</a>
+      <div class="toolbar-title">
+        <p class="eyebrow">Selection</p>
+        <h1 class="page-heading">Your Book Selection</h1>
+      </div>
+      <a id="query-admin-link" class="btn btn-outline-secondary btn-sm" href="#">Admin Login</a>
+    </header>
+
+    <section class="query-panel animate__animated animate__fadeIn">
+      <div class="section-header">
+        <div>
+          <p class="eyebrow">Checkout Flow</p>
+          <h2 class="section-title">Review Your Picks</h2>
+        </div>
+        <div id="selected-authors" class="selected-authors"></div>
+      </div>
+
+      <div id="query-message" class="alert d-none mt-4" role="alert"></div>
+
+      <form id="order-form" method="post" class="order-flow">
+        <div id="results-panel" class="results-panel mt-4">
+          <div class="table-responsive">
+            <table class="table align-middle results-table">
+              <thead>
+                <tr>
+                  <th>Select</th>
+                  <th>Cover</th>
+                  <th>Author</th>
+                  <th>Title</th>
+                  <th>Price</th>
+                </tr>
+              </thead>
+              <tbody id="query-results-body"></tbody>
+            </table>
+          </div>
+          <p id="query-count" class="result-count"></p>
+        </div>
+
+        <div id="customer-panel" class="customer-panel mt-4">
+          <div class="section-header">
+            <div>
+              <p class="eyebrow">Shipping</p>
+              <h2 class="section-title">Customer Details</h2>
+            </div>
+          </div>
+          <div class="row mt-3">
+            <div class="col-md-4 mb-3">
+              <label class="form-label" for="cust-name">Full Name</label>
+              <input id="cust-name" type="text" name="cust_name" class="form-control" required>
+            </div>
+            <div class="col-md-4 mb-3">
+              <label class="form-label" for="cust-email">Email Address</label>
+              <input id="cust-email" type="email" name="cust_email" class="form-control" required>
+            </div>
+            <div class="col-md-4 mb-3">
+              <label class="form-label" for="cust-phone">Phone Number</label>
+              <input id="cust-phone" type="text" name="cust_phone" class="form-control" required>
+            </div>
+          </div>
+        </div>
+
+        <div class="text-center mt-4">
+          <button id="submit-order-button" type="submit" class="btn btn-brown btn-lg px-5">Confirm &amp; Place Order</button>
+        </div>
+      </form>
+    </section>
+  </div>
+
+  <footer class="site-footer">&copy; 2026 e-Bookshop Experience</footer>
+</div>
+
+{{QUERY_RESULT_TEMPLATE}}

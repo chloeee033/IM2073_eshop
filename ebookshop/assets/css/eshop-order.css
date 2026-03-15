@@ -1,0 +1,73 @@
+.receipt-shell {
+  min-height: 100vh;
+}
+
+.receipt-card {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: clamp(1.5rem, 3vw, 2.4rem);
+  border-radius: 28px;
+}
+
+.receipt-status {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.45rem 0.85rem;
+  border-radius: 999px;
+  background: rgba(43, 122, 83, 0.12);
+  color: var(--success);
+  font-size: 0.86rem;
+  font-weight: 800;
+}
+
+.success-mark {
+  display: grid;
+  place-items: center;
+  width: 72px;
+  height: 72px;
+  margin: 0 auto 1rem;
+  border-radius: 50%;
+  background: rgba(43, 122, 83, 0.12);
+  color: var(--success);
+  font-size: 2.2rem;
+  font-weight: 800;
+}
+
+.summary-card,
+.shipping-card {
+  padding: 1rem 1.15rem;
+  border: 1px solid rgba(220, 201, 181, 0.8);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.76);
+}
+
+.summary-label {
+  display: block;
+  margin-bottom: 0.35rem;
+  color: var(--muted);
+  font-size: 0.8rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.receipt-total-wrap {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 1rem;
+  font-size: 1.15rem;
+}
+
+.receipt-actions {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 1.75rem;
+}
+
+@media (max-width: 576px) {
+  .receipt-actions {
+    flex-direction: column;
+  }
+}

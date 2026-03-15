@@ -1,0 +1,65 @@
+<div class="receipt-shell">
+  <div class="container py-5">
+    <section class="receipt-card animate__animated animate__zoomIn">
+      <div id="order-status-badge" class="receipt-status"></div>
+      <div id="order-error" class="alert alert-danger d-none" role="alert"></div>
+
+      <div id="receipt-success" class="d-none">
+        <div class="receipt-header text-center">
+          <div class="success-mark">✓</div>
+          <p class="eyebrow">Order Placed</p>
+          <h1 class="page-heading">Order Confirmed</h1>
+          <p id="receipt-thanks" class="page-subtitle"></p>
+        </div>
+
+        <div class="receipt-summary row g-3 mt-2">
+          <div class="col-md-6">
+            <div class="summary-card">
+              <span class="summary-label">Order ID</span>
+              <strong id="receipt-order-id"></strong>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="summary-card">
+              <span class="summary-label">Date</span>
+              <strong id="receipt-order-date"></strong>
+            </div>
+          </div>
+        </div>
+
+        <div class="shipping-card mt-4">
+          <span class="summary-label">Shipping To</span>
+          <p id="receipt-customer-name" class="mb-1"></p>
+          <p id="receipt-customer-email" class="mb-1 text-muted"></p>
+          <p id="receipt-customer-phone" class="mb-0 text-muted"></p>
+        </div>
+
+        <div class="table-responsive mt-4">
+          <table class="table receipt-table align-middle">
+            <thead>
+              <tr>
+                <th>Title</th>
+                <th>Qty</th>
+                <th>Unit Price</th>
+                <th>Line Total</th>
+              </tr>
+            </thead>
+            <tbody id="order-items-body"></tbody>
+          </table>
+        </div>
+
+        <div class="receipt-total-wrap">
+          <span>Total</span>
+          <strong id="order-total"></strong>
+        </div>
+      </div>
+
+      <div class="receipt-actions">
+        <button id="print-receipt-button" type="button" class="btn btn-brown px-4 py-2">Print Receipt</button>
+        <a id="order-back-link" class="btn btn-outline-dark px-4 py-2" href="#">Shop More</a>
+      </div>
+    </section>
+  </div>
+</div>
+
+{{ORDER_ITEM_TEMPLATE}}
