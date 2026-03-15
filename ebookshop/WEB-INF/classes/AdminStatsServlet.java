@@ -41,8 +41,7 @@ public class AdminStatsServlet extends HttpServlet {
       out.println("  <style>");
       out.println("    body { background-color: #f6f1e7; font-family: 'Georgia', serif; padding: 30px; color: #3b2f2f; }");
       out.println("    .dashboard-container { background: white; padding: 30px; border-radius: 15px; border: 1px solid #d9ccb8; box-shadow: 0 4px 20px rgba(0,0,0,0.05); }");
-      out.println("    .stat-card { border: none; border-radius: 10px; transition: transform 0.3s; box-shadow: 0 4px 10px rgba(0,0,0,0.03); }");
-      out.println("    .stat-card:hover { transform: translateY(-5px); }");
+      out.println("    .stat-card { border: none; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.03); }");
       out.println("    .table thead { background-color: #6e4b3a; color: #fff4df; }");
       out.println("    .badge-price { background-color: #6e4b3a; color: white; }");
       out.println("  </style>");
@@ -52,10 +51,9 @@ public class AdminStatsServlet extends HttpServlet {
       out.println("<div class='container-fluid dashboard-container animate__animated animate__fadeIn'>");
       
       // 顶部导航栏
-      out.println("<div class='d-flex justify-content-between align-items: center; border-bottom pb-3 mb-4'>");
-      out.println("  <a href='eshophome' class='btn btn-outline-secondary btn-sm'>← Back to Shop</a>");
+      out.println("<div class='d-flex justify-content-between align-items-center border-bottom pb-3 mb-4'>");
+      out.println("  <a href='eshophome' class='btn btn-brown btn-lg px-4 py-2' style='border-radius:0;'>← Back to Shop</a>");
       out.println("  <h2 class='m-0 fw-bold'>Admin Statistics</h2>");
-      out.println("  <span class='badge rounded-pill bg-success p-2'>● Logged in as Admin</span>");
       out.println("</div>");
 
       out.println("<div class='row g-4'>"); // 使用 Bootstrap 的网格系统布局
@@ -122,7 +120,6 @@ public class AdminStatsServlet extends HttpServlet {
       }
 
       out.println("</div>"); // 结束 row
-      out.println("<p class='text-center text-muted mt-5 small'>End of Statistics Report</p>");
       out.println("</div>"); // 结束 container
       out.println("</body></html>");
       

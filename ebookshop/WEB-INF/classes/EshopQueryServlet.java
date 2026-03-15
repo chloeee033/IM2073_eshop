@@ -41,8 +41,8 @@ public class EshopQueryServlet extends HttpServlet {
       out.println("    .table thead { background-color: #6e4b3a; color: white; }");
       out.println("    .book-img { transition: transform 0.2s; border-radius: 4px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }");
       out.println("    .book-img:hover { transform: scale(1.1); }");
-      out.println("    .btn-brown { background-color: #6e4b3a; color: white; border: none; padding: 12px 30px; }");
-      out.println("    .btn-brown:hover { background-color: #553a2d; color: #fff4df; }");
+      out.println("    .btn-brown { background-color: #6e4b3a; color: white; border: 1px solid #3b2f2f; border-radius: 0; padding: 10px 24px; font-weight: 600; transition: 0.3s; }");
+      out.println("    .btn-brown:hover { background-color: white; color: #6e4b3a; transform: scale(1.02); }");
       out.println("    .customer-card { background-color: #fffaf0; border: 1px dashed #d4c2aa; padding: 20px; border-radius: 8px; }");
       out.println("  </style>");
       out.println("</head>");
@@ -51,10 +51,10 @@ public class EshopQueryServlet extends HttpServlet {
       out.println("<div class='container main-container animate__animated animate__fadeIn'>");
 
       // 顶部导航
-      out.println("<div class='d-flex justify-content-between mb-4 border-bottom pb-3'>");
-      out.println("  <a href='eshophome' class='btn btn-outline-dark btn-sm'>← Back to Home</a>");
+      out.println("<div class='d-flex justify-content-between align-items-center mb-4 border-bottom pb-3'>");
+      out.println("  <a href='eshophome' class='btn btn-brown btn-sm px-3' style='border-radius:0;'>← Back to Home</a>");
       out.println("  <h2 class='m-0 fw-bold'>Your Book Selection</h2>");
-      out.println("  <a href='adminlogin' class='btn btn-outline-secondary btn-sm'>Admin Login</a>");
+      out.println("  <a href='adminlogin' class='btn btn-brown btn-sm px-3' style='border-radius:0;'>Admin Login</a>");
       out.println("</div>");
 
       try (
@@ -116,7 +116,7 @@ public class EshopQueryServlet extends HttpServlet {
          out.println("</div>");
 
          out.println("<div class='text-center mt-4'>");
-         out.println("  <button type='submit' class='btn btn-brown btn-lg rounded-pill animate__animated animate__pulse animate__infinite'>CONFIRM & PLACE ORDER</button>");
+         out.println("  <button type='submit' class='btn btn-brown btn-lg px-5 animate__animated animate__pulse animate__infinite'>CONFIRM & PLACE ORDER</button>");
          out.println("</div>");
          
          out.println("</form>");

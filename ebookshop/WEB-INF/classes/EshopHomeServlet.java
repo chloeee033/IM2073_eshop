@@ -8,9 +8,7 @@ import jakarta.servlet.annotation.*;
 public class EshopHomeServlet extends HttpServlet {
 
    private static String escapeHtml(String input) {
-      if (input == null) {
-         return "";
-      }
+      if (input == null) return "";
       return input.replace("&", "&amp;")
             .replace("<", "&lt;")
             .replace(">", "&gt;")
@@ -34,35 +32,45 @@ public class EshopHomeServlet extends HttpServlet {
       out.println("  <style>");
       out.println("    body { background: #f6f1e7; font-family: 'Georgia', serif; color: #3b2f2f; padding-bottom: 50px; }");
       
-      // 标题样式
-      out.println("    .main-title { font-weight: 800; color: #3b2f2f; text-shadow: 3px 3px 4px rgba(110, 75, 58, 0.6); letter-spacing: -1px; }");
-      out.println("    .title-underline { height: 4px; width: 625px; background-color: #6e4b3a; margin-top: 8px; border-radius: 2px; }");
+      out.println("    .custom-navbar { background-color: #6e4b3a; border-bottom: 2px solid #6e4b3a; padding: 12px 0; }");
+      out.println("    .nav-btn-custom { ");
+      out.println("      color: white !important; font-weight: 600; text-decoration: none; ");
+      out.println("      border: 1px solid rgba(255,255,255,0.6); padding: 8px 18px; ");
+      out.println("      transition: 0.3s; border-radius: 0; display: inline-block; ");
+      out.println("    } ");
+      out.println("    .nav-btn-custom:hover { background: white; color: #6e4b3a !important; }");
+      
+      out.println("    .brand-title { font-weight: 800; color: white !important; text-decoration: none; letter-spacing: -1px; }");
 
-      // 书本卡片样式
-      out.println("    .book-card { transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1); border: 1px solid #d9ccb8; background: white; }");
+      // 书本卡片：保持方正
+      out.println("    .book-card { transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1); border: 1px solid #d9ccb8; background: white; border-radius: 0; }");
       out.println("    .book-card:hover { transform: translateY(-8px); box-shadow: 0 12px 24px rgba(60, 40, 20, 0.15) !important; }");
       
-      // 按钮美化
-      out.println("    .btn-brown { background-color: #6e4b3a; color: white; border: none; transition: 0.3s; }");
-      out.println("    .btn-brown:hover { background-color: #553a2d; color: #fff4df; transform: scale(1.05); }");
+      out.println("    .btn-brown { ");
+      out.println("      background-color: #6e4b3a; color: white; border: 1px solid #3b2f2f; ");
+      out.println("      border-radius: 0; transition: 0.3s; font-weight: 600; ");
+      out.println("    } ");
+      out.println("    .btn-brown:hover { background-color: white; color: #6e4b3a; transform: scale(1.02); }");
       
-      // 筛选区域样式
-      out.println("    .filter-section { background: #fffaf0; border: 1px solid #d4c2aa; padding: 25px; border-radius: 8px; }");
+      // 修改点：筛选区域背景换成纯白色，边框加深一点点
+      out.println("    .filter-section { background: #ffffff; border: 1px solid #d9ccb8; padding: 25px; border-radius: 0; }");
       out.println("  </style>"); 
 
       out.println("</head>");
       out.println("<body>");
-      out.println("<div class='container mt-5'>");
 
-      out.println("<div class='d-flex justify-content-between align-items-center mb-5 animate__animated animate__fadeInDown'>");
-      out.println("  <div>");
-      out.println("    <h1 class='display-4 main-title'>Yet Another e-Bookshop</h1>");
-      out.println("    <div class='title-underline'></div>"); 
-      out.println("    <p class='lead text-muted mt-3' style='font-style: italic;'>Curated collection of digital wisdom.</p>");
-
+      // 顶部导航栏 (深色)
+      out.println("<nav class='navbar navbar-expand-lg custom-navbar mb-5 shadow-sm'>");
+      out.println("  <div class='container'>");
+      out.println("    <a class='navbar-brand brand-title fs-3' href='eshophome'>Yet Another e-Bookshop</a>");
+      out.println("    <div class='ms-auto d-flex align-items-center'>");
+      out.println("      <a class='nav-btn-custom me-3' href='eshophome'>Main Menu</a>");
+      out.println("      <a class='nav-btn-custom' href='adminlogin'>Admin Access</a>");
+      out.println("    </div>");
       out.println("  </div>");
-      out.println("  <a href='adminlogin' class='btn btn-outline-dark px-4 py-2 fw-bold' style='border-radius: 0;'>Admin Access</a>");
-      out.println("</div>");
+      out.println("</nav>");
+
+      out.println("<div class='container'>");
 
       try (
          Connection conn = DriverManager.getConnection(
@@ -71,11 +79,12 @@ public class EshopHomeServlet extends HttpServlet {
          PreparedStatement authorStmt = conn.prepareStatement("SELECT DISTINCT author FROM books ORDER BY author ASC");
          PreparedStatement bookStmt = conn.prepareStatement("SELECT * FROM books ORDER BY author ASC, title ASC");
       ) {
+         // 筛选表单 (现已改为纯白背景)
          out.println("<form method='get' action='eshopquery' class='filter-section mb-5 shadow-sm animate__animated animate__fadeIn'>");
-         out.println("  <h4 class='mb-4'><i class='bi bi-filter'></i> Filter Collections</h4>");
+         out.println("  <h4 class='mb-4 fw-bold'><i class='bi bi-filter'></i> Filter Collections</h4>");
          
          out.println("  <div class='mb-4'>");
-         out.println("    <p class='fw-bold mb-3 text-secondary'>Choose Authors:</p>");
+         out.println("    <p class='fw-bold mb-3 text-secondary text-uppercase small'>Choose Authors:</p>");
          try (ResultSet authorRset = authorStmt.executeQuery()) {
             while (authorRset.next()) {
                String author = authorRset.getString("author");
@@ -88,21 +97,22 @@ public class EshopHomeServlet extends HttpServlet {
          out.println("  </div>");
 
          out.println("<div class='row align-items-center'>");
-         out.println("<div class='col-md-6'>");
-         out.println("<span class='fw-bold me-3 text-secondary'>Sort Price:</span>");
-         out.println("<div class='form-check form-check-inline'>");
-         out.println("        <input class='form-check-input' type='radio' name='sort' value='asc' checked> Low to High");
-         out.println("      </div>");
-         out.println("      <div class='form-check form-check-inline'>");
-         out.println("        <input class='form-check-input' type='radio' name='sort' value='desc'> High to Low");
-         out.println("      </div>");
+         out.println("  <div class='col-md-6'>");
+         out.println("    <span class='fw-bold me-3 text-secondary text-uppercase small'>Sort Price:</span>");
+         out.println("    <div class='form-check form-check-inline'>");
+         out.println("      <input class='form-check-input' type='radio' name='sort' value='asc' checked> Low to High");
          out.println("    </div>");
-         out.println("    <div class='col-md-6 text-md-end mt-3 mt-md-0'>");
-         out.println("      <button type='submit' class='btn btn-brown btn-lg px-5 shadow-sm'>Apply Filters & Shop</button>");
+         out.println("    <div class='form-check form-check-inline'>");
+         out.println("      <input class='form-check-input' type='radio' name='sort' value='desc'> High to Low");
          out.println("    </div>");
          out.println("  </div>");
+         out.println("  <div class='col-md-6 text-md-end mt-3 mt-md-0'>");
+         out.println("    <button type='submit' class='btn btn-brown btn-lg px-5'>Apply Filters & Shop</button>");
+         out.println("  </div>");
+         out.println("</div>");
          out.println("</form>");
 
+         // 图书网格
          out.println("<div class='row g-4'>");
          try (ResultSet bookRset = bookStmt.executeQuery()) {
             int delay = 0;
@@ -110,7 +120,7 @@ public class EshopHomeServlet extends HttpServlet {
                String animationClass = "animate__animated animate__fadeInUp";
                out.println("<div class='col-sm-6 col-md-4 col-lg-3 " + animationClass + "' style='animation-delay: " + (delay * 0.1) + "s;'>");
                out.println("<div class='card h-100 book-card shadow-sm p-3'>");
-               out.println("<img src='" + escapeHtml(bookRset.getString("image_path")) + "' class='card-img-top shadow-sm' style='height: 280px; object-fit: cover; border-radius: 4px;'>");
+               out.println("    <img src='" + escapeHtml(bookRset.getString("image_path")) + "' class='card-img-top' style='height: 280px; object-fit: cover; border-radius: 0;'>");
                out.println("    <div class='card-body px-0 pb-0'>");
                out.println("      <h5 class='card-title fw-bold mb-2' style='font-size: 1.1rem; color: #3b2f2f;'>" + escapeHtml(bookRset.getString("title")) + "</h5>");
                out.println("      <p class='card-text text-muted mb-1 small'>By " + escapeHtml(bookRset.getString("author")) + "</p>");
